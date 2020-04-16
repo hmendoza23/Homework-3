@@ -2,6 +2,7 @@ package com.example.maptest;
 
 //import android.support.v4.app.FragmentActivity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
@@ -108,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     cardView.setVisibility(View.VISIBLE);
                 }
                 else{
-                    /*  ALERT DIALOG SHIT  */
+                    showAlertDialog(view);
 
                 }
 
@@ -166,5 +168,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public void showAlertDialog(View v){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage("Invalid Address!");
+        alert.setNeutralButton("okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(MapsActivity.this,"Re-enter address", Toast.LENGTH_SHORT);
+            }
+        });
+        alert.create().show();
+    }
 
 }
