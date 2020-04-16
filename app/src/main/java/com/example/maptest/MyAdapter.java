@@ -13,7 +13,7 @@ import java.util.ArrayList;
  **/
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
-    private ArrayList<String> carList = new ArrayList<>();
+    private ArrayList<String> addressList = new ArrayList<>();
     private Context context;
     private MapsActivity.RecyclerViewClickListener clickListener;
     /* Provide a reference to the views for each data item
@@ -21,7 +21,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
        you provide access to all the views for a data item in a view holder  */
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView carName;
+        private TextView address;
         private int position;
         private MapsActivity.RecyclerViewClickListener mListener;
 
@@ -29,9 +29,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public MyViewHolder(View v, MapsActivity.RecyclerViewClickListener listener) {
             super(v);
 
-            carName = v.findViewById(R.id.RV_address);
+            address = v.findViewById(R.id.RV_address);
             mListener = listener;
-            carName.setOnClickListener(this);
+            address.setOnClickListener(this);
         }
 
         @Override
@@ -39,17 +39,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             mListener.onClick(view, getAdapterPosition());
         }
 
-        public void setCarName(String carName) {
-            this.carName.setText(carName);
+        public void setAddressName(String address) {
+            this.address.setText(address);
         }
         public void setPosition(int position){this.position = position;}
 
     }
 
     /* Provide a suitable constructor (depends on the kind of dataset)*/
-    public MyAdapter(Context context, ArrayList<String> carList, MapsActivity.RecyclerViewClickListener listener) {
+    public MyAdapter(Context context, ArrayList<String> addressList, MapsActivity.RecyclerViewClickListener listener) {
         this.context = context;
-        this.carList = carList;
+        this.addressList = addressList;
         clickListener = listener;
     }
 
@@ -70,9 +70,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final String car = carList.get(position);
+        final String address = addressList.get(position);
 
-        holder.setCarName(car);
+        holder.setAddressName(address);
         holder.setPosition(position);
 
     }
@@ -80,6 +80,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     /* Return the size of your dataset (invoked by the layout manager) */
     @Override
     public int getItemCount() {
-        return carList.size();
+        return addressList.size();
     }
 }
+
