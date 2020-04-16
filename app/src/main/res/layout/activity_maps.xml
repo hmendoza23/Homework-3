@@ -52,8 +52,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="200dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.04"
@@ -61,7 +60,9 @@
         app:cardCornerRadius="20dp"
         app:contentPaddingLeft="15dp"
         app:contentPaddingRight="15dp"
-        android:visibility="invisible">
+        android:visibility="invisible"
+
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
