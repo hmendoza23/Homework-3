@@ -1,6 +1,7 @@
 package com.example.maptest;
 
 //import android.support.v4.app.FragmentActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,9 @@ import android.widget.EditText;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -29,6 +34,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MyAdapter myAdapter;
     private RecyclerView recyclerView;
     private ArrayList<String> addresses = new ArrayList<>();
+    MapsViewModel mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String searchText;
                 searchText = search.getText().toString();
 
+
+
+            }
+        });
+
+        mapsViewModel.getAddressData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
 
             }
         });
@@ -63,30 +78,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         CardView cardView = findViewById(R.id.card_view);
-        cardView.setVisibility(View.VISIBLE);
         recyclerView = findViewById(R.id.previousSearches);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         myAdapter = new MyAdapter(getApplicationContext(), addresses, listener);
         recyclerView.setAdapter(myAdapter);
 
-        addresses.add("shit1");
-        addresses.add("shit2");
-        addresses.add("shit3");
-        addresses.add("shit4");
-        addresses.add("shit5");
-        addresses.add("shit6");
-        addresses.add("shit");
-        addresses.add("shit");
-        addresses.add("shit");
-        addresses.add("shit");
-        addresses.add("shit");
-        addresses.add("shit");
 
-
-
-
-        myAdapter.notifyDataSetChanged();
     }
 
 
@@ -113,4 +111,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public interface RecyclerViewClickListener{
         void onClick(View view, int position);
     }
+
+    private class FindAddress extends AsyncTask<Object, String, String> {
+
+        String googleAddressData;
+        String url;
+
+        @Override
+        protected String doInBackground(Object... objects) {
+
+            url = (String) objects[1];
+
+            DownloadUrl downloadUrl = new DownloadUrl();
+            try{
+                googleAddressData = downloadUrl.readUrl(url);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            return googleAddressData;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s){
+            if(s != null){
+                mapsViewModel.postAddressData(s);
+            }
+            else{
+                System.out.println("sorry did find it");
+            }
+
+        }
+
+
+    }
+
 }
