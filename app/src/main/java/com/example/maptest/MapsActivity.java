@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -90,7 +92,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 String searchText;
                 searchText = search.getText().toString();
-                search.onEditorAction(EditorInfo.IME_ACTION_DONE);
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
 
                 LatLng latLng = getLocationFromAddress(searchText);
 
@@ -110,8 +114,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     cardView.setVisibility(View.VISIBLE);
                 }
                 else{
+                    search.clearComposingText();
                     showAlertDialog(view);
-
                 }
 
             }

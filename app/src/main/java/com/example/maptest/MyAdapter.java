@@ -25,6 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView address;
+        private String fullAddress;
         private TextView index;
         private int position;
         private MapsActivity.RecyclerViewClickListener mListener;
@@ -45,7 +46,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
 
         public void setAddressName(String address) {
-            this.address.setText(address);
+            fullAddress = address;
+
+            String[] temp = address.split(",");
+
+            this.address.setText(temp[0]);
         }
         public void setPosition(int position){this.position = position;}
         public void setIndex(int position){
