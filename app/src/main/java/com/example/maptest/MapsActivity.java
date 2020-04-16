@@ -1,6 +1,8 @@
 package com.example.maptest;
 
 //import android.support.v4.app.FragmentActivity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -37,7 +40,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MyAdapter myAdapter;
     private RecyclerView recyclerView;
     private ArrayList<String> addresses = new ArrayList<>();
-    MapsViewModel mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
 
 
     @Override
@@ -45,27 +47,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
-
-        search = findViewById(R.id.searchbar);
-        searchbtn = findViewById(R.id.searchbtn);
-
-        searchbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String searchText;
-                searchText = search.getText().toString();
-
-
-
-            }
-        });
-
-        mapsViewModel.getAddressData().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-            }
-        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -76,16 +57,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         RecyclerViewClickListener listener = new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-
+                LatLng latLng = getLocationFromAddress(addresses.get(position));
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.title(addresses.get(position));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                markerOptions.position(latLng);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
             }
         };
 
-        CardView cardView = findViewById(R.id.card_view);
+        final CardView cardView = findViewById(R.id.card_view);
         recyclerView = findViewById(R.id.previousSearches);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         myAdapter = new MyAdapter(getApplicationContext(), addresses, listener);
         recyclerView.setAdapter(myAdapter);
+
+
+
+        search = findViewById(R.id.searchbar);
+        searchbtn = findViewById(R.id.searchbtn);
+
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchText;
+                searchText = search.getText().toString();
+
+                LatLng latLng = getLocationFromAddress(searchText);
+
+                if(latLng != null) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.title(searchText);
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    markerOptions.position(latLng);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+                    addresses.add(searchText);
+                    myAdapter.notifyDataSetChanged();
+                    cardView.setVisibility(View.VISIBLE);
+                }
+                else{
+                    /*  ALERT DIALOG SHIT  */
+                }
+
+            }
+        });
+
+
+
 
 
     }
@@ -115,43 +137,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         void onClick(View view, int position);
     }
 
-    private class FindAddress extends AsyncTask<Object, String, String> {
+    public LatLng getLocationFromAddress(String strAddress){
+        Geocoder coder = new Geocoder(getBaseContext());
+        List<Address> addresses;
 
-        String googleAddressData;
-        String url;
-
-        @Override
-        protected String doInBackground(Object... objects) {
-
-            url = (String) objects[1];
-
-            DownloadUrl downloadUrl = new DownloadUrl();
-            try{
-                googleAddressData = downloadUrl.readUrl(url);
-            }catch(IOException e){
-                e.printStackTrace();
+        try {
+            addresses = coder.getFromLocationName(strAddress, 1);
+            if (addresses == null) {
+                return null;
             }
+            Address location = addresses.get(0);
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
 
-            return googleAddressData;
+            LatLng latLng = new LatLng(lat, lng);
+            return latLng;
+        } catch (Exception e) {
+            return null;
         }
-
-
-        @Override
-        protected void onPostExecute(String s){
-            if(s != null){
-                List<HashMap<String, String>> locationData;
-                DataParser parser = new DataParser();
-                locationData = parser.parse(s);
-
-                mapsViewModel.postAddressData(locationData.get(0));
-            }
-            else{
-                System.out.println("sorry did find it");
-            }
-
-        }
-
-
     }
+
 
 }
