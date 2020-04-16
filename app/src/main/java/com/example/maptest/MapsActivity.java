@@ -2,6 +2,7 @@ package com.example.maptest;
 
 //import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -54,5 +55,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(34.0522, 118.2437);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    /* call back interface */
+    public interface RecyclerViewClickListener{
+        void onClick(View view, int position);
     }
 }
