@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
@@ -22,6 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView address;
+        private TextView index;
         private int position;
         private MapsActivity.RecyclerViewClickListener mListener;
 
@@ -30,6 +34,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             super(v);
 
             address = v.findViewById(R.id.RV_address);
+            index = v.findViewById(R.id.index);
             mListener = listener;
             address.setOnClickListener(this);
         }
@@ -43,6 +48,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             this.address.setText(address);
         }
         public void setPosition(int position){this.position = position;}
+        public void setIndex(int position){
+            int temp = position + 1;
+            String temp2 = String.valueOf(temp);
+            this.index.setText(temp2);
+        }
 
     }
 
@@ -73,6 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         final String address = addressList.get(position);
 
         holder.setAddressName(address);
+        holder.setIndex(position);
         holder.setPosition(position);
 
     }

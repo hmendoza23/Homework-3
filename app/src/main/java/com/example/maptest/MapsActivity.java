@@ -1,11 +1,13 @@
 package com.example.maptest;
 
 //import android.support.v4.app.FragmentActivity;
+import android.app.AlertDialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -62,8 +64,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.title(addresses.get(position));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 markerOptions.position(latLng);
+                mMap.clear();
+                mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }
         };
 
@@ -84,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 String searchText;
                 searchText = search.getText().toString();
+                search.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
                 LatLng latLng = getLocationFromAddress(searchText);
 
@@ -92,8 +97,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     markerOptions.title(searchText);
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     markerOptions.position(latLng);
+
+                    mMap.clear();
+                    mMap.addMarker(markerOptions);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
                     addresses.add(searchText);
                     myAdapter.notifyDataSetChanged();
@@ -101,6 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else{
                     /*  ALERT DIALOG SHIT  */
+
                 }
 
             }
