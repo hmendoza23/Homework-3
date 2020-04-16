@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         search = findViewById(R.id.searchbar);
         searchbtn = findViewById(R.id.searchbtn);
 
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchText;
+                searchText = search.getText().toString();
+
+
+            }
+        });
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -51,14 +62,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-
+        CardView cardView = findViewById(R.id.card_view);
+        cardView.setVisibility(View.VISIBLE);
         recyclerView = findViewById(R.id.previousSearches);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         myAdapter = new MyAdapter(getApplicationContext(), addresses, listener);
         recyclerView.setAdapter(myAdapter);
 
+        addresses.add("shit1");
+        addresses.add("shit2");
+        addresses.add("shit3");
+        addresses.add("shit4");
+        addresses.add("shit5");
+        addresses.add("shit6");
+        addresses.add("shit");
+        addresses.add("shit");
+        addresses.add("shit");
+        addresses.add("shit");
+        addresses.add("shit");
+        addresses.add("shit");
 
+
+
+
+        myAdapter.notifyDataSetChanged();
     }
 
 
