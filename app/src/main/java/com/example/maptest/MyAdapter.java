@@ -29,7 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public MyViewHolder(View v, MapsActivity.RecyclerViewClickListener listener) {
             super(v);
 
-            carName = v.findViewById(R.id.name);
+            carName = v.findViewById(R.id.RV_address);
             mListener = listener;
             carName.setOnClickListener(this);
         }

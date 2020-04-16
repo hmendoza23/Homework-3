@@ -45,8 +45,9 @@
         android:layout_weight="1"
         android:background="@android:color/white"
         android:elevation="5dp"
-        android:hint="    Enter an address"
-        android:outlineProvider="bounds" />
+        android:hint="Enter an address"
+        android:outlineProvider="bounds"
+        android:paddingLeft="20dp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -58,7 +59,8 @@
         android:layout_marginBottom="-10dp"
         app:cardCornerRadius="20dp"
         app:contentPaddingLeft="15dp"
-        app:contentPaddingRight="15dp">
+        app:contentPaddingRight="15dp"
+        android:visibility="invisible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -84,7 +86,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/address"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:isScrollContainer="true"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
