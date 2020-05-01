@@ -60,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
+        //Function to click on card view and plot a previously searched address
         RecyclerViewClickListener listener = new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -87,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         search = findViewById(R.id.searchbar);
         searchbtn = findViewById(R.id.searchbtn);
 
+        //Function to search address based on searchbar
         searchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,24 +129,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(34.0522, 118.2437);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     /* call back interface */
@@ -152,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         void onClick(View view, int position);
     }
 
+    //Function to convert address into longitude and latitude for plotting map and marker
     public LatLng getLocationFromAddress(String strAddress){
         Geocoder coder = new Geocoder(getBaseContext());
         List<Address> addresses;
@@ -172,6 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    //Alert dialog for when address is invalid, or not entered
     public void showAlertDialog(View v){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Error");
